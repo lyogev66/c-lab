@@ -3,7 +3,7 @@
 #include "list.h"
 
 
-void main()
+int main()
 {
 	a_list *list=NULL;
 	input_struct parsed_input;
@@ -15,6 +15,7 @@ void main()
 	parsed_input=input_main();
 	programs_status=list_main(parsed_input,&list);
 	}
+	return 1;
 }
 
 
