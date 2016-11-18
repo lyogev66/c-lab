@@ -75,7 +75,7 @@ input_struct input_main()
 	char input_data_string[100];
 	input_struct parsed_struct;
 
-	scanf("%s",input_data_string);
+	gets(input_data_string);
 	turn_mixedcase_type_to_lowercase(input_data_string);
 	parsed_struct=parse_data_to_input_struct(input_data_string);
 	return parsed_struct;
