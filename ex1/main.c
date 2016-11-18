@@ -2,6 +2,8 @@
 #include "input.h"
 #include "list.h"
 
+//do you see this?
+
 void main()
 {
 	a_list *list=NULL;
