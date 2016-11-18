@@ -2,7 +2,6 @@
 #include "input.h"
 #include "list.h"
 
-//do you see this?
 
 void main()
 {
