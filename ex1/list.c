@@ -51,7 +51,7 @@ int add_after(a_list **list, int num_to_add, int num_to_add_after)
 	return(QUIT);
 }
 
-int index(a_list **list, int num_to_find)
+int get_index(a_list **list, int num_to_find)
 {
 	int index=0;
 	a_list *current=*list;
@@ -152,7 +152,7 @@ int list_main(input_struct parsed_input, a_list **list)
 	case ADD_AFTER:
 		return(add_after(list, parsed_input.index1, parsed_input.index2));
 	case INDEX:
-		return(index(list, parsed_input.index1));
+		return(get_index(list, parsed_input.index1));
 	case DEL:
 		if (parsed_input.index1 == 0)
 			return(del_first(list));
