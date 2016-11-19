@@ -159,7 +159,10 @@ int list_main(input_struct parsed_input, a_list **list)
 	case PRINT_LIST:
 		return(print(list));
 	case EXIT_LIST:
-		return(terminate(list));
+		if (*list == NULL)
+			return(QUIT);
+		else
+			return(terminate(list));
 	default :
 		return(QUIT);
 	}
