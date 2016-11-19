@@ -130,7 +130,7 @@ int print(a_list **list)
 int terminate(a_list **list)
 {
 	if (*list == NULL)
-	return(QUIT);
+		return(QUIT);
 	a_list *current=*list;
 	while(current->next!=NULL)
 	{
