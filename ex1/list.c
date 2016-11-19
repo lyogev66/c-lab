@@ -129,6 +129,8 @@ int print(a_list **list)
 
 int terminate(a_list **list)
 {
+	if (*list == NULL)
+	return(QUIT);
 	a_list *current=*list;
 	while(current->next!=NULL)
 	{
@@ -159,10 +161,7 @@ int list_main(input_struct parsed_input, a_list **list)
 	case PRINT_LIST:
 		return(print(list));
 	case EXIT_LIST:
-		if (*list == NULL)
-			return(QUIT);
-		else
-			return(terminate(list));
+		return(terminate(list));
 	default :
 		return(QUIT);
 	}
