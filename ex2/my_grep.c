@@ -38,8 +38,6 @@ void init_grep_options(grep_options_struct *grep_options)
 void get_grep_options(grep_options_struct *grep_options,char *argv[],int argc)
 {
 	int argc_index, search_term_found=FALSE, target_file_found=FALSE;
-	grep_options->argv_index_for_file_name=-1;
-
 	for (argc_index=1;argc_index<argc;argc_index++)
 	{
 		printf("%s",argv[argc_index]);
