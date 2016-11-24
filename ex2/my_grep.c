@@ -20,12 +20,12 @@ typedef struct grep_options_struct
 	int argv_index_for_file_name;
 } grep_options_struct;
 
-grep_options_struct get_grep_options(grep_options_struct grep_options, char *argv[])
+void get_grep_options(grep_options_struct *grep_options,char *argv[])
 {
-
 	//parsing of string to search and file name will be here
-	grep_options.argv_index_for_target_str=1;
-	grep_options.argv_index_for_file_name=2;
+
+	grep_options->argv_index_for_target_str=1;
+	grep_options->argv_index_for_file_name=2;
 }
 
 FILE* get_file(char *argv[], grep_options_struct grep_options)
@@ -54,9 +54,9 @@ int main(int argc, char *argv[])
 
 	char *file_name;
 	grep_options_struct grep_options;
-	FILE=
-	get_grep_options(grep_options,argv);
 
+	get_grep_options(&grep_options,argv);
+	file=get_file(argv,grep_options);
 	//get_file_name(file_name,argv,index_for_file_name_in_argv);
 	//=argv[2];
 
