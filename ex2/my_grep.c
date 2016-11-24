@@ -25,7 +25,14 @@ typedef struct grep_options_struct
 
 void init_grep_options(grep_options_struct *grep_options)
 {
-	
+	grep_options->is_b_active=FALSE;
+	grep_options->is_c_active=FALSE;
+	grep_options->is_i_active=FALSE;
+	grep_options->is_n_active=FALSE;
+	grep_options->is_v_active=FALSE;
+	grep_options->is_x_active=FALSE;
+	grep_options->argv_index_for_target_str=-1;
+	grep_options->argv_index_for_file_name=-1;
 }
 
 void get_grep_options(grep_options_struct *grep_options,char *argv[],int argc)
