@@ -84,11 +84,6 @@ void get_grep_options(grep_options_struct *grep_options,char *argv[],int argc)
 		}
 	}
 }
-			target_file_found=TRUE;
-			continue;
-		}
-	}
-}
 
 FILE* get_file(char *argv[], grep_options_struct grep_options)
 {
