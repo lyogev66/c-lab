@@ -25,6 +25,7 @@ typedef struct grep_options_struct
 
 void init_grep_options(grep_options_struct *grep_options)
 {
+	grep_options->value_for_a=0;
 	grep_options->is_b_active=FALSE;
 	grep_options->is_c_active=FALSE;
 	grep_options->is_i_active=FALSE;
@@ -38,10 +39,15 @@ void init_grep_options(grep_options_struct *grep_options)
 void get_grep_options(grep_options_struct *grep_options,char *argv[],int argc)
 {
 	int argc_index, search_term_found=FALSE, target_file_found=FALSE;
+	grep_options->argv_index_for_file_name=-1;
+
 	for (argc_index=1;argc_index<argc;argc_index++)
 	{
-		printf("%s",argv[argc_index]);
-
+		if (!strcmp(argv[argc_index],"-A")) {
+			argc_index++;
+			grep_options->value_for_a=atoi(argv[argc_index]);
+			continue;
+		}
 		if (!strcmp(argv[argc_index],"-b")) {
 			grep_options->is_b_active=TRUE;
 			continue;
@@ -73,6 +79,11 @@ void get_grep_options(grep_options_struct *grep_options,char *argv[],int argc)
 		}
 		if (target_file_found==FALSE) {
 			grep_options->argv_index_for_file_name=argc_index;
+			target_file_found=TRUE;
+			continue;
+		}
+	}
+}
 			target_file_found=TRUE;
 			continue;
 		}
