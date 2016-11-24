@@ -74,11 +74,14 @@ void get_grep_options(grep_options_struct *grep_options,char *argv[],int argc)
 	}
 }
 
-FILE *get_file(char *argv[], grep_options_struct grep_options)
+FILE* get_file(char *argv[], grep_options_struct grep_options)
 {
 	FILE *fp;
+
+	if (grep_options.argv_index_for_file_name==-1)
+		return stdin; 
 	fp=fopen(argv[grep_options.argv_index_for_file_name],"r");
-	if (fp==NULL)
+	if(fp==NULL)
 		exit(ERROR);
 	return fp;
 }
@@ -87,29 +90,15 @@ FILE *get_file(char *argv[], grep_options_struct grep_options)
 int main(int argc, char *argv[])
 {
 	FILE *file;
-	char parser;
-	int line_size;
-
 	char **line=NULL;
 	size_t n;
 	char *pointer_to_searched_substring;
-	int index_for_file_name_in_argv;
-
-	//here is sub stringggggggggggggggggggggggggggg
-	char sub_string[]="bla";
-
-	char *file_name;
 	grep_options_struct grep_options;
+	
 
 	get_grep_options(&grep_options,argv,argc);
 	file=get_file(argv,grep_options);
-	//get_file_name(file_name,argv,index_for_file_name_in_argv);
-	//=argv[2];
 
-	//file=fopen(file_name,"r");
-
-	if (file==NULL)
-		return ERROR;
 
 	getline(line,&n,file);
 	while(!feof(file))
