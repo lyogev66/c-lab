@@ -108,7 +108,7 @@ int main(int argc, char *argv[])
 
 
 		//print if found
-		pointer_to_searched_substring=strstr(*line,sub_string);
+		pointer_to_searched_substring=strstr(*line,argv[grep_options.argv_index_for_target_str]);
 		if (!pointer_to_searched_substring==NULL)
 			printf("%s", *line);//will be inside a function so ok
 		getline(line,&n,file);
