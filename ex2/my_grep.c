@@ -31,41 +31,38 @@ void get_grep_options(grep_options_struct *grep_options,char *argv[])
 FILE* get_file(char *argv[], grep_options_struct grep_options)
 {
 	FILE *fp;
-	fp=fopen(argv[grep_options.argv_index_for_file_name=2],"r");
-	if (fp==NULL)
+
+	if (grep_options.argv_index_for_file_name==-1)
+		return stdin; 
+	fp=fopen(argv[grep_options.argv_index_for_file_name],"r");
+	if(fp==NULL)
 		exit(ERROR);
-	else return fp;
+	return fp;
 }
 
 
 int main(int argc, char *argv[])
 {
 	FILE *file;
-	char parser;
-	int line_size;
 
 	char **line=NULL;
 	size_t n;
 	char *pointer_to_searched_substring;
-	int index_for_file_name_in_argv;
-
-	//here is sub stringggggggggggggggggggggggggggg
-	char sub_string[]="bla";
-
-	char *file_name;
 	grep_options_struct grep_options;
 
+
+	
 	get_grep_options(&grep_options,argv);
 	file=get_file(argv,grep_options);
+
+
 	//get_file_name(file_name,argv,index_for_file_name_in_argv);
 	//=argv[2];
 
 	//file=fopen(file_name,"r");
 
-	if (file==NULL)
-		return ERROR;
-
 	getline(line,&n,file);
+	printf("%s",line);
 	while(!feof(file))
 	{
 
@@ -73,9 +70,9 @@ int main(int argc, char *argv[])
 
 
 		//print if found
-		pointer_to_searched_substring=strstr(*line,sub_string);
-		if (!pointer_to_searched_substring==NULL)
-			printf("%s", *line);//will be inside a function so ok
+		pointer_to_searched_substring=strstr(*line,argv[grep_options.argv_index_for_target_str]);
+		//if (!pointer_to_searched_substring==NULL)
+			//printf("%s", *line);//will be inside a function so ok
 		getline(line,&n,file);
 	}
 
@@ -84,5 +81,7 @@ int main(int argc, char *argv[])
 	return OK;
 
 
-
 }
+
+
+
