@@ -1,6 +1,7 @@
 /* This code is public domain -- Will Hartung 4/9/09 */
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 size_t getline(char **lineptr, size_t *n, FILE *stream) {
     char *bufptr = NULL;
@@ -52,6 +53,33 @@ size_t getline(char **lineptr, size_t *n, FILE *stream) {
     *n = size;
 
     return p - bufptr - 1;
+}
+
+char* strcasestr(char* str1, const char* str2)
+{
+	char* p1 = str1;
+    const char* p2 = str2;
+    char* r = *p2 == 0 ? str1 : 0;
+
+    while(*p1 != 0 && *p2 != 0)
+    {
+        if (tolower(*p1)==tolower(*p2)) {
+            if (r==0)
+                r=p1;
+            p2++;
+		}
+		else {
+            p2 = str2;
+            if (tolower(*p1)==tolower(*p2)) {
+                r = p1;
+                p2++;
+            }
+            else
+				r=0;
+		}
+        p1++ ;
+    }
+    return *p2 == 0 ? r : 0;
 }
 /*
 int main(int argc, char** args) {
