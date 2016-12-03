@@ -102,3 +102,27 @@ int take_care_of_b_case(grep_options_struct grep_options)
 	return FALSE;
 
 }
+
+int take_care_of_c_case(grep_options_struct grep_options)
+{
+	if (grep_options.is_c_active==TRUE)
+		return TRUE;
+	return FALSE;
+
+}
+
+int take_care_of_i_case(grep_options_struct grep_options)
+{
+	if (grep_options.is_i_active==TRUE)
+		return TRUE;
+	return FALSE;
+
+}
+
+int take_care_of_n_case(grep_options_struct grep_options)
+{
+	if (grep_options.is_n_active==TRUE)
+		return TRUE;
+	return FALSE;
+
+}
