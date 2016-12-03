@@ -29,5 +29,8 @@ void get_grep_options(grep_options_struct *grep_options,char *argv[],int argc);
 FILE* open_file_or_open_stdin(char *argv[], grep_options_struct grep_options);
 int take_care_of_v_case(char *pointer_to_searched_substring,grep_options_struct grep_options);
 int take_care_of_b_case(grep_options_struct grep_options);
+int take_care_of_c_case(grep_options_struct grep_options);
+int take_care_of_i_case(grep_options_struct grep_options);
+int take_care_of_n_case(grep_options_struct grep_options);
 
 #endif
