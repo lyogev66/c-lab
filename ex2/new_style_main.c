@@ -32,16 +32,15 @@ typedef struct matched_struct
 {
 	char *match_line;
 	size_t file_bytes_counter;
-	int match_found,line_counter;
+	int match_found,line_counter,number_of_matches,number_of_lines_remained_to_print;
 }matched_struct;
 
+void report_line_match(matched_struct *matched_line,char *line,grep_options_struct grep_options);
 void read_line(FILE *file,char *line,matched_struct *match_line);
 int is_match_in_line(char *line,grep_options_struct grep_options);
 void print_match(matched_struct matched,grep_options_struct grep_options);
 void init_grep_arguments(grep_options_struct *grep_options);
 void get_grep_arguments(grep_options_struct *grep_options,char *argv[],int argc);
-void take_care_of_of_i_flag(grep_options_struct * grep_options, char * line);
-void take_care_of_of_flags(grep_options_struct * grep_options, char* line);
 FILE * open_file_or_stdin(grep_options_struct grep_options);
 void init_match_line(matched_struct *matched_line);
 char* strcasestr(char* str1, char* str2);
@@ -61,7 +60,8 @@ void main(int argc, char *argv[])
 	char *pointer_to_searched_substring,*line=NULL;
 
 	if (argc<MIN_ARGUMENT_NUMBER){
-		assert("NOT enough arguments\n"); //ned to handle
+		printf("NOT enough arguments\n"); //ned to handle
+		exit(0);
 	}
 	get_grep_arguments(&grep_options,argv,argc);
 	file=open_file_or_stdin(grep_options);
@@ -76,20 +76,35 @@ void main(int argc, char *argv[])
 		//}
 
 		matched_line.match_found=is_match_in_line(line,grep_options);
-		if (matched_line.match_found==TRUE){
-			matched_line.match_line=line;
+		report_line_match(&matched_line,line,grep_options);
+		if (matched_line.number_of_lines_remained_to_print>0){
 			print_match(matched_line,grep_options);
+			matched_line.number_of_lines_remained_to_print--;
 		}
+	}
+	if(grep_options.is_c_active==TRUE)
+	{
+		printf("%d\n",matched_line.number_of_matches );
 	}
 	free(matched_line.match_line);
 	fclose(file);
 }
 
+
+void report_line_match(matched_struct *matched_line,char *line,grep_options_struct grep_options)
+{
+	if(matched_line->match_found==TRUE){
+			matched_line->match_line=line;
+			matched_line->number_of_lines_remained_to_print=1+grep_options.value_for_a;
+			matched_line->number_of_matches+=matched_line->match_found;
+	}
+}
+
 void read_line(FILE *file,char **line,matched_struct *match_line)
 {
-	size_t allocated_size_for_line;
+	size_t allocated_size_for_line,n_value_get_line;
 	int get_line_return_value;
-	get_line_return_value=getline(line ,&allocated_size_for_line,file);
+	allocated_size_for_line=getline(line ,&n_value_get_line,file);
 	//if (get_line_return_value==-1)	{
 	//	printf("getline failed\n");
 	//	exit(1);
@@ -100,44 +115,46 @@ void read_line(FILE *file,char **line,matched_struct *match_line)
 
 int is_match_in_line(char *line,grep_options_struct grep_options)
 {
+	int return_expresion=(grep_options.is_v_active==TRUE);
+
 	if (grep_options.is_i_active==FALSE){
-		if (strstr(line,grep_options.searched_str)==NULL){
-			return (grep_options.is_v_active==TRUE);
-		}
-		else {
-			return (grep_options.is_v_active==FALSE);
+		if(grep_options.is_x_active==FALSE){
+			if (strstr(line,grep_options.searched_str)==NULL){
+				return (return_expresion);
+			}
+			else {
+				return (!return_expresion);
+			}
+		}else{
+			if (strcmp(line,grep_options.searched_str)==NULL){
+				return (return_expresion);
+			}
+			else {
+				return (!return_expresion);
+			}
 		}
 	} else{
 		if (strcasestr(line,grep_options.searched_str)==NULL){
-			return(grep_options.is_v_active==TRUE);
+			return(return_expresion);
 		}
 		else {
-			return (grep_options.is_v_active==FALSE);
+			return (!return_expresion);
 		}
-	}
-}
-
-void take_care_of_of_flags(grep_options_struct * grep_options, char* line)
-{
-	take_care_of_of_i_flag( grep_options, line);
-	//take_care_of_of_v_flag();
-}
-
-void take_care_of_of_i_flag(grep_options_struct * grep_options, char * line)
-{
-	if (grep_options->is_i_active==TRUE){
-		//grep_options->searched_str=tolower(grep_options->searched_str);
-		//strcpy(line,tolower(line));
 	}
 }
 
 void print_match(matched_struct matched,grep_options_struct grep_options)
 {
-	if(grep_options.is_c_active==FALSE)	{
+	if(grep_options.is_c_active==FALSE){
+		if(grep_options.is_n_active==TRUE){
+			printf("%d\:",matched.line_counter);
+		}
+		if(grep_options.is_b_active==TRUE){
+			printf("%d\:",matched.file_bytes_counter);
+		}
 		printf("%s",matched.match_line);
-	}	else{
-		printf("%d\n",matched.line_counter);
 	}
+
 }
 
 void init_grep_arguments(grep_options_struct *grep_options)
@@ -220,9 +237,11 @@ FILE * open_file_or_stdin(grep_options_struct grep_options)
 void init_match_line(matched_struct * matched_line)
 {
 	matched_line->line_counter=0;
+	matched_line->number_of_matches =0;
 	matched_line->match_found =FALSE;
 	matched_line->match_line =NULL;
 	matched_line->file_bytes_counter=0;
+	matched_line->number_of_lines_remained_to_print=0;
 }
 
 char* strcasestr(char* str1, char* str2)
