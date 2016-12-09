@@ -1,8 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include "my_grep.h"
-#include "helper.h"
+
+char* strcasestr(char* str1, char* str2);
+void init_grep_arguments(grep_options_struct *grep_options);
 
 void report_line_match(matched_struct *matched_line,char *line,grep_options_struct grep_options)
 {
@@ -17,10 +20,6 @@ void read_line(FILE *file,char **line,matched_struct *match_line)
 {
 	size_t allocated_size_for_line,n_value_get_line;
 	allocated_size_for_line=getline(line ,&n_value_get_line,file);
-	//if (get_line_return_value==-1)	{
-	//	printf("getline failed\n");
-	//	exit(1);
-	//}
 	match_line->file_bytes_counter+=allocated_size_for_line;
 	match_line->line_counter++;
 }
@@ -62,7 +61,7 @@ void print_match(matched_struct matched,grep_options_struct grep_options)
 			printf("%d:",matched.line_counter);
 		}
 		if(grep_options.is_b_active==TRUE){
-			printf("%d:",matched.file_bytes_counter);
+			printf("%ld:",matched.file_bytes_counter);
 		}
 		printf("%s",matched.match_line);
 	}
@@ -86,7 +85,7 @@ void get_grep_arguments(grep_options_struct *grep_options,char *argv[],int argc)
 {
 	int argc_index, search_term_found=FALSE, target_file_found=FALSE;
 	init_grep_arguments(grep_options);
-	//grep_options->argv_index_for_file_name=NO_INDEX;
+
 
 	for (argc_index=1;argc_index<argc;argc_index++)
 	{

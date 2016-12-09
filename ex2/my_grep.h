@@ -26,14 +26,12 @@ typedef struct matched_struct
 	int match_found,line_counter,number_of_matches,number_of_lines_remained_to_print;
 }matched_struct;
 
-void report_line_match(matched_struct *matched_line,char *line,grep_options_struct grep_options);
+void get_grep_arguments(grep_options_struct *grep_options,char *argv[],int argc);
+FILE * open_file_or_stdin(grep_options_struct grep_options);	
+void init_match_line(matched_struct *matched_line);
 void read_line(FILE *file,char **line,matched_struct *match_line);
 int is_match_in_line(char *line,grep_options_struct grep_options);
+void report_line_match(matched_struct *matched_line,char *line,grep_options_struct grep_options);
 void print_match(matched_struct matched,grep_options_struct grep_options);
-void init_grep_arguments(grep_options_struct *grep_options);
-void get_grep_arguments(grep_options_struct *grep_options,char *argv[],int argc);
-FILE * open_file_or_stdin(grep_options_struct grep_options);
-void init_match_line(matched_struct *matched_line);
-char* strcasestr(char* str1, char* str2);
 
 #endif

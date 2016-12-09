@@ -4,7 +4,6 @@
 #include <assert.h>
 #include <ctype.h>
 #include "my_grep.h"
-#include "helper.h"
 
 void main(int argc, char *argv[])
 {
