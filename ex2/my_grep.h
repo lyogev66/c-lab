@@ -1,13 +1,10 @@
 #ifndef MY_GREP_H
 #define MY_GREP_H
 
+#define MIN_ARGUMENT_NUMBER		2
 #define TRUE					1
 #define FALSE					0
-#define FUNCTION_RETURN_ERROR	1
-#define FUNCTION_RETURN_OK		0
-#define NO_INDEX				-1
-#define PRINT_CURRENT_LINE		1
-#define	DONT_PRINT_CURRENT_LINE	0
+
 
 typedef struct grep_options_struct
 {
@@ -18,19 +15,25 @@ typedef struct grep_options_struct
 	int is_n_active;
 	int is_v_active;
 	int is_x_active;
-	int argv_index_for_target_str;
-	int argv_index_for_file_name;
+	char *searched_str;
+	char *file_name;
 } grep_options_struct;
 
+typedef struct matched_struct
+{
+	char *match_line;
+	size_t file_bytes_counter;
+	int match_found,line_counter,number_of_matches,number_of_lines_remained_to_print;
+}matched_struct;
 
-
-void init_grep_options(grep_options_struct *grep_options);
-void get_grep_options(grep_options_struct *grep_options,char *argv[],int argc);
-FILE* open_file_or_open_stdin(char *argv[], grep_options_struct grep_options);
-int take_care_of_v_case(char *pointer_to_searched_substring,grep_options_struct grep_options);
-int take_care_of_b_case(grep_options_struct grep_options);
-int take_care_of_c_case(grep_options_struct grep_options);
-int take_care_of_i_case(grep_options_struct grep_options);
-int take_care_of_n_case(grep_options_struct grep_options);
+void report_line_match(matched_struct *matched_line,char *line,grep_options_struct grep_options);
+void read_line(FILE *file,char **line,matched_struct *match_line);
+int is_match_in_line(char *line,grep_options_struct grep_options);
+void print_match(matched_struct matched,grep_options_struct grep_options);
+void init_grep_arguments(grep_options_struct *grep_options);
+void get_grep_arguments(grep_options_struct *grep_options,char *argv[],int argc);
+FILE * open_file_or_stdin(grep_options_struct grep_options);
+void init_match_line(matched_struct *matched_line);
+char* strcasestr(char* str1, char* str2);
 
 #endif
