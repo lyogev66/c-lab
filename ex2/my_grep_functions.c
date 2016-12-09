@@ -9,8 +9,8 @@ void init_grep_arguments(grep_options_struct *grep_options);
 
 void report_line_match(matched_struct *matched_line,char *line,grep_options_struct grep_options)
 {
+	matched_line->match_line=line;
 	if(matched_line->match_found==TRUE){
-			matched_line->match_line=line;
 			matched_line->number_of_lines_remained_to_print=1+grep_options.value_for_a;
 			matched_line->number_of_matches+=matched_line->match_found;
 	}
@@ -54,19 +54,33 @@ int is_match_in_line(char *line,grep_options_struct grep_options)
 	}
 }
 
+void print_for_n_flag(matched_struct matched,grep_options_struct grep_options)
+{
+	if(grep_options.is_n_active==TRUE){
+		if(matched.match_found==TRUE){
+			printf("%d:",matched.line_counter);
+		}else{
+			printf("%d-",matched.line_counter);
+		}
+	}
+}
+void print_for_b_flag(matched_struct matched,grep_options_struct grep_options)
+{
+
+		if(grep_options.is_b_active==TRUE){
+			printf("%ld:",((matched.file_bytes_counter)-strlen(matched.match_line)));
+		}
+}
+
 void print_match(matched_struct matched,grep_options_struct grep_options)
 {
 	if(grep_options.is_c_active==FALSE){
-		if(grep_options.is_n_active==TRUE){
-			printf("%d:",matched.line_counter);
-		}
-		if(grep_options.is_b_active==TRUE){
-			printf("%ld:",matched.file_bytes_counter);
-		}
+		print_for_n_flag(matched,grep_options);
+		print_for_b_flag(matched,grep_options);
 		printf("%s",matched.match_line);
 	}
 
-}
+}	
 
 void init_grep_arguments(grep_options_struct *grep_options)
 {
