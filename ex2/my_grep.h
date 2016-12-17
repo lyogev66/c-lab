@@ -5,7 +5,6 @@
 #define TRUE					1
 #define FALSE					0
 
-
 typedef struct grep_options_struct
 {
 	int value_for_a;
@@ -15,23 +14,18 @@ typedef struct grep_options_struct
 	int is_n_active;
 	int is_v_active;
 	int is_x_active;
+	int is_E_active;
 	char *searched_str;
 	char *file_name;
 } grep_options_struct;
 
-typedef struct matched_struct
+typedef struct line_descriptor_struct
 {
-	char *match_line;
+	char *current_line;
 	size_t file_bytes_counter;
 	int match_found,line_counter,number_of_matches,number_of_lines_remained_to_print;
-}matched_struct;
+}line_descriptor_struct;
 
-void get_grep_arguments(grep_options_struct *grep_options,char *argv[],int argc);
-FILE * open_file_or_stdin(grep_options_struct grep_options);	
-void init_match_line(matched_struct *matched_line);
-void read_line(FILE *file,char **line,matched_struct *match_line);
-int is_match_in_line(char *line,grep_options_struct grep_options);
-void report_line_match(matched_struct *matched_line,char *line,grep_options_struct grep_options);
-void print_match(matched_struct matched,grep_options_struct grep_options);
+
 
 #endif

@@ -1,14 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include <assert.h>
-#include <ctype.h>
 #include "my_grep.h"
+#include "my_grep_functions.h"
 
 void main(int argc, char *argv[])
 {
 	FILE *file=NULL;
-	matched_struct matched_line;
+	line_descriptor_struct line_descriptor;
 	grep_options_struct grep_options;
 	char *line=NULL;
 
@@ -19,23 +17,21 @@ void main(int argc, char *argv[])
 	get_grep_arguments(&grep_options,argv,argc);
 	file=open_file_or_stdin(grep_options);
 
-	init_match_line(&matched_line);
-	read_line(file,&line,&matched_line);
+	init_line_descriptor_struct(&line_descriptor);
+	read_line(file,&line,&line_descriptor);
 	while(!feof(file)){
 
-		matched_line.match_found=is_match_in_line(line,grep_options);
-		report_line_match(&matched_line,line,grep_options);
-		if (matched_line.number_of_lines_remained_to_print>0){
-			print_match(matched_line,grep_options);
-			matched_line.number_of_lines_remained_to_print--;
+		fill_line_descriptor(&line_descriptor,line,grep_options);
+		if (line_descriptor.number_of_lines_remained_to_print>0){
+			print_match(line_descriptor,grep_options);
+			line_descriptor.number_of_lines_remained_to_print--;
 		}
-		read_line(file,&line,&matched_line);
+		read_line(file,&line,&line_descriptor);
 	}
-	if(grep_options.is_c_active==TRUE)
-	{
-		printf("%d\n",matched_line.number_of_matches);
+	if(grep_options.is_c_active==TRUE)	{
+		printf("%d\n",line_descriptor.number_of_matches);
 	}
-	free(matched_line.match_line);
+	free(line_descriptor.current_line);
 	fclose(file);
 }
 
