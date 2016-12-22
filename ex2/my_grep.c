@@ -16,7 +16,6 @@ void main(int argc, char *argv[])
 	}
 	get_grep_arguments(&grep_options,argv,argc);
 	file=open_file_or_stdin(grep_options);
-
 	init_line_descriptor_struct(&line_descriptor);
 	read_line(file,&line,&line_descriptor);
 	while(!feof(file)){
