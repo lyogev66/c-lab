@@ -111,7 +111,6 @@ void insert_sqr_to_regex_array\
 void insert_round_to_regex_array\
 	(grep_options_struct *grep_options,type_of_character type,char * curl_barc_str1,char * curl_barc_str2)
 {
-	char *temp1=curl_barc_str1;
 	allocate_cell_for_regex_array(grep_options);
 	grep_options->regex_array[grep_options->size_of_regex_array-1].curl_barc_str1 = curl_barc_str1 ;
 	grep_options->regex_array[grep_options->size_of_regex_array-1].curl_barc_str2 = curl_barc_str2 ;
@@ -153,7 +152,6 @@ int count_number_of_char_to_jump(char *start_char_brack)
 
 void convert_substring_to_two_string(grep_options_struct *grep_options)
 {
-	regex_struct temp_struct;
 	char *temp1_str_ptr=NULL;
 	int current_index=0;
 
@@ -330,6 +328,7 @@ int is_match_recursive(char *line_copy,grep_options_struct grep_options,int rege
 		return FALSE;
 	}
 							}
+	return FALSE;
 	}
 
 int is_match_recursive_case(char * line_copy,grep_options_struct grep_options)
