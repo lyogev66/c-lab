@@ -30,7 +30,8 @@ void main(int argc, char *argv[])
 	if(grep_options.is_c_active==TRUE)	{
 		printf("%d\n",line_descriptor.number_of_matches);
 	}
-	free(line_descriptor.current_line);
+	free(line);
+	free(grep_options.regex_array);
 	fclose(file);
 }
 
