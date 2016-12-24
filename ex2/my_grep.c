@@ -3,7 +3,7 @@
 #include "my_grep.h"
 #include "my_grep_functions.h"
 
-void main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
 	FILE *file=NULL;
 	line_descriptor_struct line_descriptor;
@@ -33,6 +33,5 @@ void main(int argc, char *argv[])
 	free(line);
 	free(grep_options.regex_array);
 	fclose(file);
+	return(0);
 }
-
-
