@@ -1,6 +1,8 @@
 #ifndef MY_GREP_H
 #define MY_GREP_H
 
+#include <stdio.h>
+
 #define MIN_ARGUMENT_NUMBER		2
 #define TRUE					1
 #define FALSE					0
@@ -41,7 +43,5 @@ typedef struct line_descriptor_struct
 	size_t file_bytes_counter;
 	int match_found,line_counter,number_of_matches,number_of_lines_remained_to_print;
 }line_descriptor_struct;
-
-
 
 #endif

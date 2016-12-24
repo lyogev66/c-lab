@@ -1,9 +1,10 @@
+#include "my_grep.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <ctype.h>   ///tolower
-#include "my_grep.h"
-#include "helper.h" ///remove in unix
+#include <ctype.h>   
+
+#include "helper.h" ///unix only
 
 #define PAD_WITH_END_OF_STRING 1
 #define CURRENT_CHAR 0
@@ -30,10 +31,15 @@ void init_grep_arguments(grep_options_struct *grep_options)
 
 void read_line(FILE *file,char **line,line_descriptor_struct *line_descriptor)
 {
+	char *lineptr=*line;
 	size_t allocated_size_for_line,n_value_get_line;
+
 	allocated_size_for_line=getline(line ,&n_value_get_line,file);
 	line_descriptor->file_bytes_counter+=allocated_size_for_line;
 	line_descriptor->line_counter++;
+	if(feof(file)){
+	free(lineptr);
+	}
 }
 
 void create_copy_strings(char *line,grep_options_struct grep_options,char **line_copy,char **search_string_copy)
@@ -327,8 +333,8 @@ int is_match_recursive(char *line_copy,grep_options_struct grep_options,int rege
 		}
 		return FALSE;
 	}
-							}
-	return FALSE;
+					}
+	return FALSE;	
 	}
 
 int is_match_recursive_case(char * line_copy,grep_options_struct grep_options)

@@ -1,7 +1,7 @@
+#include "my_grep_functions.h"
+#include "my_grep.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "my_grep.h"
-#include "my_grep_functions.h"
 
 void run_my_grep_routine(FILE *file,grep_options_struct grep_options)
 {
@@ -21,7 +21,6 @@ void run_my_grep_routine(FILE *file,grep_options_struct grep_options)
 	if(grep_options.is_c_active==TRUE)	{
 		printf("%d\n",line_descriptor.number_of_matches);
 	}
-	free(line);
 	free(grep_options.regex_array);
 	fclose(file);
 }

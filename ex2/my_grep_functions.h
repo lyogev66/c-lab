@@ -1,5 +1,6 @@
 #ifndef MY_GREP_FUNCTIONS_H
 #define MY_GREP_FUNCTIONS_H
+#include "my_grep.h"
 
 void get_grep_arguments(grep_options_struct *grep_options,char *argv[],int argc);
 FILE * open_file_or_stdin(grep_options_struct grep_options);	
