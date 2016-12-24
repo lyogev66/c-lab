@@ -1,5 +1,4 @@
 #include "my_grep.h"
-#include "helper.h" //remove in unix
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -30,12 +29,13 @@ void init_grep_arguments(grep_options_struct *grep_options)
 
 void read_line(FILE *file, char **line, line_descriptor_struct *line_descriptor)
 {
-  char *lineptr = *line;
+  char *lineptr = NULL;
   size_t allocated_size_for_line, n_value_get_line;
 
   allocated_size_for_line = getline(line, &n_value_get_line, file);
   line_descriptor->file_bytes_counter += allocated_size_for_line;
   line_descriptor->line_counter++;
+  lineptr = *line;
   if (feof(file)) {
     free(lineptr);
   }
