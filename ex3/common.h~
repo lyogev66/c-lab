@@ -1,0 +1,8 @@
+#ifndef COMMON_H
+#define COMMON_H
+
+#define TYPE_HTTP 100
+#define TYPE_SERVER 101
+
+#endif
+
