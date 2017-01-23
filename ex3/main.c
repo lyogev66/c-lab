@@ -14,38 +14,40 @@
 #include <stdbool.h>
 #include <time.h>
 
-#define STATUS_OK 0
+void accept_connections_and_serve_client(int socket_server_array[NUMBER_OF_SERVERS], int bind_socket_for_client)
+{
+  int server_selector = 0, socket_client;
+  char *request_from_client, *responce_from_server;
 
-// should be in common.h?
-#define NUMBER_OF_SERVERS 3
+  while (true) {
+    socket_client = accept(bind_socket_for_client, NULL, NULL);
+    if (socket_client == ERROR_VALUE) {
+      printf("Error accepting socket\n");
+      exit(ERROR_VALUE);
+    }
+    request_from_client = recv_full_request_or_responce(socket_client, TYPE_CLIENT);
+    send_to_socket(socket_server_array[server_selector], request_from_client);
+    free(request_from_client);
+    responce_from_server = recv_full_request_or_responce(socket_server_array[server_selector], TYPE_SERVER);
+    send_to_socket(socket_client, responce_from_server);
+    free(responce_from_server);
+    server_selector = (server_selector + 1) % NUMBER_OF_SERVERS;
+    close(socket_client);
+  }
+}
 
 int main()
 {
   time_t srand_seed;
-  int server_selector = 1;
-  char *parsed_request_from_http, *parsed_responce_from_server;
-  int bind_socket_for_http, bind_socket_for_server;
-  int socket_http, socket_server_array[NUMBER_OF_SERVERS];
+
+  int bind_socket_for_client, bind_socket_for_server;
+  int socket_server_array[NUMBER_OF_SERVERS];
 
   srand((unsigned)time(&srand_seed));
-  bind_socket_for_http = setup_listening_socket(TYPE_HTTP);
-  bind_socket_for_server = setup_listening_socket(TYPE_SERVER);
+  bind_socket_for_client = choose_port_and_start_listening(TYPE_CLIENT);
+  bind_socket_for_server = choose_port_and_start_listening(TYPE_SERVER);
   accept_all_servers(socket_server_array, bind_socket_for_server);
+  accept_connections_and_serve_client(socket_server_array, bind_socket_for_client);
 
-  while (true) {
-    socket_http = accept(bind_socket_for_http, NULL, NULL);
-    if (socket_http == ERROR_VALUE) {
-      printf("Error accepting socket\n");
-      exit(STATUS_ERROR);
-    }
-    parsed_request_from_http = parse_the_request_or_responce(socket_http, TYPE_HTTP);
-    send_to_socket(socket_server_array[server_selector], parsed_request_from_http);
-    free(parsed_request_from_http);
-    parsed_responce_from_server = parse_the_request_or_responce(socket_server_array[server_selector], TYPE_SERVER);
-    send_to_socket(socket_http, parsed_responce_from_server);
-    free(parsed_responce_from_server);
-    server_selector = (server_selector + 1) % NUMBER_OF_SERVERS;
-    close(socket_http);
-  }
-  return STATUS_OK;
+  return 0;
 }

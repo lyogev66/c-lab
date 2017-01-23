@@ -16,10 +16,7 @@
 #define MIN_PORT_NUMBER 1024
 #define BACKLOG 10
 
-// should be in common.h?
-#define NUMBER_OF_SERVERS 3
-
-int get_port_in_range() { return ((rand() + MIN_PORT_NUMBER) % MAX_PORT_NUMBER); }
+int get_port_in_range() { return ((rand() % (MAX_PORT_NUMBER - MIN_PORT_NUMBER)) + MIN_PORT_NUMBER); }
 void write_port_to_file(char *filename, int port_number)
 {
   FILE *port_file;
@@ -28,7 +25,8 @@ void write_port_to_file(char *filename, int port_number)
   fprintf(port_file, "%d", port_number);
   fclose(port_file);
 }
-int setup_listening_socket(int type_server_or_http)
+
+int choose_port_and_start_listening(int type_client_or_server)
 {
   struct sockaddr_in service;
   int new_socket, port_number;
@@ -37,7 +35,7 @@ int setup_listening_socket(int type_server_or_http)
   new_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
   if (new_socket == ERROR_VALUE) {
     printf("Error creating socket\n");
-    exit(STATUS_ERROR);
+    exit(ERROR_VALUE);
   }
   setsockopt(new_socket, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(int));
   service.sin_family = AF_INET;
@@ -51,15 +49,16 @@ int setup_listening_socket(int type_server_or_http)
   if (listen_succesfull == ERROR_VALUE) {
     printf("Error listening to socket\n");
     close(new_socket);
-    exit(STATUS_ERROR);
+    exit(ERROR_VALUE);
   }
-  if (type_server_or_http == TYPE_HTTP) {
+  if (type_client_or_server == TYPE_CLIENT) {
     write_port_to_file(HTTP_PORT_FILENAME, port_number);
   } else {
     write_port_to_file(SERVER_PORT_FILENAME, port_number);
   }
   return new_socket;
 }
+
 void accept_all_servers(int socket_server_array[NUMBER_OF_SERVERS], int bind_socket_for_server)
 {
   int i;
@@ -67,7 +66,7 @@ void accept_all_servers(int socket_server_array[NUMBER_OF_SERVERS], int bind_soc
     socket_server_array[i] = accept(bind_socket_for_server, NULL, NULL);
     if (socket_server_array[i] == ERROR_VALUE) {
       printf("Error accepting socket\n");
-      exit(STATUS_ERROR);
+      exit(ERROR_VALUE);
     }
   }
 }

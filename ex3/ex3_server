@@ -1,26 +1,27 @@
 #!/usr/bin/python2.7 -tt
 from socket import *
-FILENAME = "server_port"
+import sys
+
+#FILENAME = "server_port"
 BUFFER_SIZE = 1024
 HOST = "localhost"
 response_string_for_invalid_request = "HTTP/1.1 404 Not Found\r\n" \
                                     "Content-type: text/html\r\nContent-length: 135\r\n" \
                                     "<html><head><title>Not Found</title></head><body>\r\n" \
                                     "Sorry, the object you requested was not found.\r\n</body><html>"
-port_file = open(FILENAME,"r")
-port_number = int(port_file.readline())
-port_file.close()
+
+port_number=int(sys.argv[1])
 server_socket = socket()
 server_socket.connect((HOST,port_number))
 connections_counter = 0
 
 while True:
-    response = ""
+    request = ""
     while True:
-        response += server_socket.recv(BUFFER_SIZE)
-        if response.count('\r\n\r\n') == 1:
+        request += server_socket.recv(BUFFER_SIZE)
+        if request.count('\r\n\r\n') == 1:
             break
-    first_line = response.split("\r\n")[0]
+    first_line = request.split("\r\n")[0]
     second_word_in_first_line = str(first_line.split(" ")[1])
     if second_word_in_first_line == "/counter" :
         connections_counter += 1
@@ -29,6 +30,5 @@ while True:
         server_socket.send(response_string_for_valid_request)
     else:
         server_socket.send(response_string_for_invalid_request)
-server_socket.close()
 
 
